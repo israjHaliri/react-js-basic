@@ -4,7 +4,18 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store = createStore(MainReducer, applyMiddleware(thunk.withExtraArgument(history)));
+
+ReactDOM.render((
+  <Provider store={store}>
+    <Router history={history}>
+      <Switch>
+        <Route path='/login' component={Login}></Route>
+        <Route path='/' component={Common}></Route>
+      </Switch>
+    </Router>
+  </Provider>
+), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
