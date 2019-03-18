@@ -1,121 +1,121 @@
-import {addAdminClearData} from "../actions/admin-creator";
 import {history} from '../history';
-import {ADMIN_CANCEL_EDIT, ADMIN_LIST, HIDELOADING, SHOWLOADING} from "../actions/action-types";
-import {SAVE_SUCCESS, UPDATE_SUCCESS, DATA_EXIST} from "../constant/status-code";
+import {GET_ADMIN, HIDELOADING, SHOWLOADING} from "../actions/action-types";
 
-const fetchAdminList = () => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: SHOWLOADING
-        });
+const getData = () => {
+  console.log("data loaded");
+  return (dispatch, getState) => {
+    dispatch({
+      type: SHOWLOADING
+    });
 
-        const token = localStorage.getItem('current-token');
+    const token = localStorage.getItem('current-token');
 
-        fetch(process.env.REACT_APP_ENDPOINT + "/admins", {
-            method: 'GET',
-            headers: new Headers({
-                'Authorization': token
-            })
-        }).then(async (response) => {
-            dispatch({
-                type: HIDELOADING
-            });
+    fetch("https://reqres.in/api/users", {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': token
+      })
+    }).then(async (response) => {
+      dispatch({
+        type: HIDELOADING
+      });
 
-            const status = await response.status;
-            if (!response.ok) {
-                console.error(status);
-                throw status;
-            }
-            let responseJson = await response.json();
+      const status = await response.status;
+      if (!response.ok) {
+        console.error(status);
+        throw status;
+      }
 
-            dispatch({
-                type: ADMIN_LIST,
-                value: responseJson
-            });
+      let responseJson = await response.json();
 
-        }).catch(e => {
-            if (e === 403) {
-                history.push('/login');
-            }
-        });
-    };
+      dispatch({
+        type: GET_ADMIN,
+        value: responseJson
+      });
+
+    }).catch(e => {
+      if (e === 403) {
+        history.push('/login');
+      }
+    });
+  };
 };
 
-const saveAdmin = () => {
-    return (dispatch, getState) => {
+const postData = (data, callback) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SHOWLOADING
+    });
+
+    const token = localStorage.getItem('current-token');
+
+    fetch("https://reqres.in/api/users", {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        "name": "morpheus",
+        "job": "leader"
+      })
+    }).then(async response => {
+      dispatch({
+        type: HIDELOADING
+      });
+
+      const jsonData = await response.json();
+
+      if (jsonData != null) {
+        callback(jsonData)
         dispatch({
-            type: SHOWLOADING
+          type: GET_ADMIN,
+          value: {
+            "page": 2,
+            "per_page": 3,
+            "total": 12,
+            "total_pages": 4,
+            "data": [
+              {
+                "id": 4,
+                "first_name": "Eve",
+                "last_name": "Holt",
+                "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"
+              },
+              {
+                "id": 5,
+                "first_name": "Charles",
+                "last_name": "Morris",
+                "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
+              },
+              {
+                "id": 6,
+                "first_name": "Tracey",
+                "last_name": "Ramos",
+                "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/bigmancho/128.jpg"
+              },
+              {
+                "id": 7,
+                "first_name": "morpheus",
+                "last_name": "job leader",
+                "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/bigmancho/128.jpg"
+              }
+            ]
+          }
         });
+      } else {
+        alert('Failed to update, make sure your data is correct');
+      }
 
-        const editedAdmin = getState().editAdminReducer;
+    });
 
-        const token = localStorage.getItem('current-token');
-
-        fetch(process.env.REACT_APP_ENDPOINT + '/admins', {
-            method: 'PATCH',
-            headers: new Headers({
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify(editedAdmin)
-        }).then(async response => {
-            dispatch({
-                type: HIDELOADING
-            });
-
-            const jsonData = await response.json();
-
-            if (jsonData.status === UPDATE_SUCCESS) {
-                dispatch(fetchAdminList());
-                dispatch({type: ADMIN_CANCEL_EDIT});
-            } else {
-                alert('Failed to update, make sure your data is correct');
-            }
-
-        });
-
-    }
+  }
 };
 
-const addAdmin = () => {
-    return (dispatch, getState) => {
-        dispatch({
-            type: SHOWLOADING
-        });
-
-        const editedAdmin = getState().addAdminReducer;
-
-        const token = localStorage.getItem('current-token');
-
-        fetch(process.env.REACT_APP_ENDPOINT + '/admins', {
-            method: 'POST',
-            headers: new Headers({
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify(editedAdmin)
-        }).then(async response => {
-            dispatch({
-                type: HIDELOADING
-            });
-            
-            const jsonData = await response.json();
-            const statusCode = await response.status;
-
-            console.log(statusCode, jsonData);
-
-            if (jsonData.status === SAVE_SUCCESS) {
-                dispatch(fetchAdminList());
-                dispatch(addAdminClearData());
-            }else if(jsonData.status === DATA_EXIST){
-                alert("Data exist")
-            } else {
-                alert('Failed to save, make sure your data is correct');
-            }
-
-        });
-
-    }
+const putData = (data) => {
+  return (dispatch, getState) => {
+    console.log("put data", data)
+  }
 };
 
-export {fetchAdminList, saveAdmin, addAdmin}
+export {getData, postData, putData}
