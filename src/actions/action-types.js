@@ -1,0 +1,13 @@
+export const SHOWLOADING = 'SHOWLOADING';
+export const HIDELOADING = 'HIDELOADING';
+
+export const ADMIN_LIST = 'ADMIN_LIST';
+export const ADMIN_LIST_EDIT = 'ADMIN_LIST_EDIT';
+export const ADMIN_CANCEL_EDIT = 'ADMIN_CANCEL_EDIT';
+export const ADMIN_ADD_NEW_DATA = 'ADMIN_ADD_NEW_DATA';
+export const ADMIN_ADD_CLEAR_DATA = 'ADMIN_ADD_CLEAR_DATA';
+export const ADMIN_NEW_VALUE = 'ADMIN_NEW_VALUE';
+export const FIND_EVENT = 'FIND_EVENT';
+export const SAVE_EVENT = 'SAVE_EVENT';
+export const UPDATE_EVENT = 'UPDATE_EVENT';
+export const LOGIN = 'LOGIN';

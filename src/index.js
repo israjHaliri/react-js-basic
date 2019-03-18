@@ -1,8 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import {Route, Router, Switch} from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
+
+import {applyMiddleware, createStore} from 'redux';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+import MainReducer from './reducers/main-reducer'
+
+import {history} from './history';
+import Login from './component/login';
+import Common from './layout/common';
 
 const store = createStore(MainReducer, applyMiddleware(thunk.withExtraArgument(history)));
 
