@@ -7,6 +7,7 @@ import Header from './header';
 import SideBar from './sidebar';
 
 import Admin from '../component/admin';
+import User from '../component/user';
 import Error from '../component/error';
 
 class Common extends Component {
@@ -31,8 +32,8 @@ class Common extends Component {
     }
 
     render() {
-        if(this.props.location.pathname === '/'){
-            return <Redirect to='/admin'  />
+        if(this.props.location.pathname === '/admin'){
+            return <Redirect to='/admin/operator'  />
         }
 
         return (
@@ -43,8 +44,9 @@ class Common extends Component {
                     <main className="main">
                         {this.showLoading()}
                         <Switch>
-                            <Route path='/admin' component={Admin}></Route>
-                            <Route path='*' component={Error}></Route>
+                            <Route path='/admin/operator' component={Admin}></Route>
+                            <Route path='/admin/user' component={User}></Route>
+                            <Route path='/admin/*' component={Error}></Route>
                         </Switch>
                     </main>
                 </div>

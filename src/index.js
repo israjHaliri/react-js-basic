@@ -10,7 +10,9 @@ import MainReducer from './reducers/main-reducer'
 
 import {history} from './history';
 import Login from './component/login';
+import Home from './component/home';
 import Common from './layout/common';
+import FrontCommon from './layout/FrontCommon'
 
 const store = createStore(MainReducer, applyMiddleware(thunk.withExtraArgument(history)));
 
@@ -19,7 +21,9 @@ ReactDOM.render((
     <Router history={history}>
       <Switch>
         <Route path='/login' component={Login}></Route>
-        <Route path='/' component={Common}></Route>
+        <Route path='/admin' component={Common}></Route>
+        <Route path='/home' component={FrontCommon}></Route>
+        <Route path='/' component={Home}></Route>
       </Switch>
     </Router>
   </Provider>
